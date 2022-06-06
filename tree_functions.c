@@ -56,6 +56,9 @@ tree *tree_insert(tree *node, tree new_node)
         strcpy(node->name, new_node.name);
         node->left_node = new_node.left_node;
         node->right_node = new_node.right_node;
+        node->height = 0;
+        
+        return node;
     }
     else if (new_node.cpf < node->cpf)
     {
@@ -70,7 +73,7 @@ tree *tree_insert(tree *node, tree new_node)
         printf("Erro! Chave ja existe!");
     }
 
-    node->height = highest(node_height(node->left_node), node_height(node->right_node));
+    node->height = highest(node_height(node->left_node), node_height(node->right_node)) + 1;
 
     // node = rebalance(node);
 
@@ -83,7 +86,7 @@ void tree_print_left_to_right(tree *node, int level)
     {
         tree_print_left_to_right(node->left_node, level + 1);
 
-        printf("[%d] %s (%d)", node->cpf, node->name, level);
+        printf("[%d] %s (%d)", node->cpf, node->name, node->height /*level*/);
 
         tree_print_left_to_right(node->right_node, level + 1);
     }
@@ -115,23 +118,34 @@ tree *tree_remove(tree *node, int key)
                 if (node->left_node != NULL && node->right_node != NULL)
                 {
                     tree *aux = node->left_node;
-                    while (aux->right_node != NULL) // nao sei exatamente oq isso faz
+
+                    // ok entendi oq isso faz, eh pra pegar o maior nodo entre node
+                    // e seu filho esquerdo, e trocar de lugar tal maior nodo com o node,
+                    // depois remove o node
+                    while (aux->right_node != NULL)
                         aux = aux->right_node;
+                    
                     node->cpf = aux->cpf;
                     aux->cpf = key;
+
                     printf("Elemento trocado: %d !\n", key);
+
                     node->left_node = tree_remove(node->left_node, key);
+
                     return node;
                 }
                 else
                 {
                     // remover nós que possuem apenas 1 filho
                     tree *aux;
+
                     if (node->left_node != NULL)
                         aux = node->left_node;
                     else
                         aux = node->right_node;
+                    
                     free(node);
+
                     printf("Elemento com 1 filho removido: %d !\n", key);
                     return aux;
                 }
@@ -149,7 +163,7 @@ tree *tree_remove(tree *node, int key)
 
         /*
                 // verifica a necessidade de rebalancear a árvore
-                raiz = balancear(raiz);
+                node = rebalance(node);
         */
         return node;
     }
