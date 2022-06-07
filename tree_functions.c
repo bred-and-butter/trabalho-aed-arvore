@@ -145,15 +145,45 @@ tree *tree_insert(tree *node, tree new_node)
     return node;
 }
 
-void tree_print_left_to_right(tree *node, int level)
+void tree_print(tree *node)
 {
     if (!node_is_empty(node))
     {
-        tree_print_left_to_right(node->left_node, level + 1);
+        printf("[%d] %s (%d) ", node->cpf, node->name, node->height);
 
-        printf("[%d] %s (%d) ", node->cpf, node->name, node->height /*level*/);
+        tree_print(node->left_node);
 
-        tree_print_left_to_right(node->right_node, level + 1);
+        tree_print(node->right_node);
+    }
+
+    return;
+}
+
+void tree_print_inc_order(tree *node)
+{
+    if (!node_is_empty(node))
+    {
+        tree_print_inc_order(node->left_node);
+
+        printf("[%d] %s (%d) ", node->cpf, node->name, node->height);
+
+        tree_print_inc_order(node->right_node);
+    }
+
+    return;
+}
+
+void tree_print_structure(tree *node, int level)
+{
+    int i;
+    if (!node_is_empty(node))
+    {
+        tree_print_structure(node->right_node, level + 1);
+        for (i = 0; i <= level; i++)
+            printf("   ");
+        printf("[%d] %s (%d)\n", node->cpf, node->name, node->height /*level*/);
+
+        tree_print_structure(node->left_node, level + 1);
     }
 
     return;

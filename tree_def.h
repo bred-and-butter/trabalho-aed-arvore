@@ -29,11 +29,11 @@ tree *tree_insert(tree *node, tree new_node); // ok
 
 tree *tree_search(tree *root, int key);
 
-void tree_print_left_to_right(tree *node, int level); // ok
+void tree_print(tree *node);
 
-void tree_print_in_order(tree *root);
+void tree_print_inc_order(tree *node); // ok
 
-void tree_print_structure(tree *root);
+void tree_print_structure(tree *root, int level);
 
 tree *tree_remove(tree *root, int key); // ok
 

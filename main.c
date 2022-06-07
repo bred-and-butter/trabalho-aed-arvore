@@ -18,6 +18,7 @@ tree create_new_node()
     strcpy(new_node.name, name);
     new_node.left_node = NULL;
     new_node.right_node = NULL;
+    new_node.height = 0;
 
     return new_node;
 }
@@ -46,7 +47,8 @@ int main()
         case 2:
             printf("Imprimindo elementos\n");
 
-            tree_print_left_to_right(root, 0);
+            tree_print(root);
+
             break;
 
         case 3:
@@ -58,7 +60,9 @@ int main()
             break;
 
         case 4:
-            /* code */
+            printf("Imprimindo elementos em ordem crescente\n");
+
+            tree_print_inc_order(root);
             break;
 
         case 5:
@@ -71,15 +75,20 @@ int main()
             break;
 
         case 7:
-            /* code */
+            printf("Imprimindo estrutura da arvore\n");
+
+            tree_print_structure(root, 0);
             break;
 
         case 8:
+            break;
+
+        case 9:
             exit(0);
             break;
 
         default:
-            printf("Opcao invalida");
+            printf("Opcao invalida\n");
             break;
         }
 
