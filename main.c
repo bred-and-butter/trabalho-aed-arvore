@@ -66,7 +66,8 @@ int main()
             break;
 
         case 6:
-            /* code */
+            printf("Altura da arvore: %d\n", node_height(root));
+
             break;
 
         case 7:

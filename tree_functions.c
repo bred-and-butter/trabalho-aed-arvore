@@ -3,10 +3,6 @@
 #include <string.h>
 #include "tree_def.h"
 
-#define CALL_LIMIT 50
-
-unsigned int FUNCTION_CALL_AMOUNT = 0;
-
 int highest(int a, int b)
 {
     return (a > b) ? a : b;
@@ -39,16 +35,85 @@ int node_height(tree *node)
     }
 }
 
+short balance_factor(tree *node)
+{
+    if (node)
+        return (node_height(node->left_node) - node_height(node->right_node));
+    else
+        return 0;
+}
+
+tree *rotate_left(tree *node)
+{
+    tree *son, *grandson;
+
+    son = node->right_node;    // son aponta para a subárvore direita da raiz node
+    grandson = son->left_node; // grandson aponta para o filho esquerdo de son
+
+    son->left_node = node;       // o filho esquerdo de son passa a ser a raiz node
+    node->right_node = grandson; // o filho direito de node passa a ser grandson
+
+    // recalcula a altura dos nós que foram movimentados
+    node->height = highest(node_height(node->left_node), node_height(node->right_node)) + 1;
+    son->height = highest(node_height(son->left_node), node_height(son->right_node)) + 1;
+
+    return son;
+}
+
+tree *rotate_right(tree *node)
+{
+    tree *son, *grandson;
+
+    son = node->left_node;
+    grandson = son->right_node;
+
+    son->right_node = node;
+    node->left_node = grandson;
+
+    node->height = highest(node_height(node->left_node), node_height(node->right_node)) + 1;
+    son->height = highest(node_height(son->left_node), node_height(son->right_node)) + 1;
+
+    return son;
+}
+
+tree *rotate_left_right(tree *node)
+{
+    node->left_node = rotate_left(node->left_node);
+    return rotate_right(node);
+}
+
+tree *rotate_right_left(tree *node)
+{
+    node->right_node = rotate_right(node->right_node);
+    return rotate_left(node);
+}
+
+tree *rebalance(tree *node)
+{
+    short fb = balance_factor(node);
+
+    // Rotação à esquerda
+    if (fb < -1 && balance_factor(node->right_node) <= 0)
+        node = rotate_left(node);
+
+    // Rotação à direita
+    else if (fb > 1 && balance_factor(node->left_node) >= 0)
+        node = rotate_right(node);
+
+    // Rotação dupla à esquerda
+    else if (fb > 1 && balance_factor(node->left_node) < 0)
+        node = rotate_left_right(node);
+
+    // Rotação dupla à direita
+    else if (fb < -1 && balance_factor(node->right_node) > 0)
+        node = rotate_right_left(node);
+
+    return node;
+}
+
 tree *tree_insert(tree *node, tree new_node)
 {
-    FUNCTION_CALL_AMOUNT++;
-
-    if (FUNCTION_CALL_AMOUNT > CALL_LIMIT)
-    {
-        printf("Chamadas aninhadas de funcao excederam limite de %d", CALL_LIMIT);
-        exit(1);
-    }
-    else if (node_is_empty(node))
+    if (node_is_empty(node))
     {
         node = (tree *)malloc(sizeof(tree));
 
@@ -57,7 +122,7 @@ tree *tree_insert(tree *node, tree new_node)
         node->left_node = new_node.left_node;
         node->right_node = new_node.right_node;
         node->height = 0;
-        
+
         return node;
     }
     else if (new_node.cpf < node->cpf)
@@ -75,7 +140,7 @@ tree *tree_insert(tree *node, tree new_node)
 
     node->height = highest(node_height(node->left_node), node_height(node->right_node)) + 1;
 
-    // node = rebalance(node);
+    node = rebalance(node);
 
     return node;
 }
@@ -86,7 +151,7 @@ void tree_print_left_to_right(tree *node, int level)
     {
         tree_print_left_to_right(node->left_node, level + 1);
 
-        printf("[%d] %s (%d)", node->cpf, node->name, node->height /*level*/);
+        printf("[%d] %s (%d) ", node->cpf, node->name, node->height /*level*/);
 
         tree_print_left_to_right(node->right_node, level + 1);
     }
@@ -119,12 +184,9 @@ tree *tree_remove(tree *node, int key)
                 {
                     tree *aux = node->left_node;
 
-                    // ok entendi oq isso faz, eh pra pegar o maior nodo entre node
-                    // e seu filho esquerdo, e trocar de lugar tal maior nodo com o node,
-                    // depois remove o node
                     while (aux->right_node != NULL)
                         aux = aux->right_node;
-                    
+
                     node->cpf = aux->cpf;
                     aux->cpf = key;
 
@@ -143,7 +205,7 @@ tree *tree_remove(tree *node, int key)
                         aux = node->left_node;
                     else
                         aux = node->right_node;
-                    
+
                     free(node);
 
                     printf("Elemento com 1 filho removido: %d !\n", key);
@@ -161,10 +223,9 @@ tree *tree_remove(tree *node, int key)
         // Recalcula a altura de todos os nós entre a raiz e o novo nó inserido
         node->height = highest(node_height(node->left_node), node_height(node->right_node)) + 1;
 
-        /*
-                // verifica a necessidade de rebalancear a árvore
-                node = rebalance(node);
-        */
+        // verifica a necessidade de rebalancear a árvore
+        node = rebalance(node);
+
         return node;
     }
 }

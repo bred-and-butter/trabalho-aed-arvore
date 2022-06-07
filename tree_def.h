@@ -39,7 +39,7 @@ tree *tree_remove(tree *root, int key); // ok
 
 int tree_node_amount(tree *root);
 
-int tree_height(tree *root);
+int node_height(tree *root); // ok
 
 void tree_clear(tree *root);
 
