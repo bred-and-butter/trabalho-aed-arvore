@@ -145,6 +145,30 @@ tree *tree_insert(tree *node, tree new_node)
     return node;
 }
 
+void tree_search(tree *node, int key)
+{
+    if (node == NULL)
+    {
+        printf("Valor nao encontrado!\n");
+        return;
+    }
+    else
+    { // procura o nó
+        if (node->cpf == key)
+        {
+            printf("[%d] %s (%d) ", node->cpf, node->name, node->height);
+            return;
+        }
+        else
+        {
+            if (key < node->cpf)
+                tree_search(node->left_node, key);
+            else
+                tree_search(node->right_node, key);
+        }
+    }
+}
+
 void tree_print(tree *node)
 {
     if (!node_is_empty(node))

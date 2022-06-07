@@ -81,6 +81,10 @@ int main()
             break;
 
         case 8:
+            printf("Insira cpf do elemento que deseja buscar: ");
+            scanf("%d", &key);
+
+            tree_search(root, key);
             break;
 
         case 9:

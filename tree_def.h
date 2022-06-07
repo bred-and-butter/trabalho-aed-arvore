@@ -27,7 +27,7 @@ bool node_is_empty(tree *node); // ok
 
 tree *tree_insert(tree *node, tree new_node); // ok
 
-tree *tree_search(tree *root, int key);
+void tree_search(tree *node, int key);
 
 void tree_print(tree *node);
 
