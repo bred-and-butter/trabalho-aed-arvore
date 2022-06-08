@@ -206,7 +206,7 @@ void tree_print_structure(tree *node, int level)
         tree_print_structure(node->right_node, level + 1);
         for (i = 0; i <= level; i++)
             printf("   ");
-        printf("[%d] %s (%d)\n", node->cpf, node->name, node->height /*level*/);
+        printf("[%d] %s (%d)\n", node->cpf, node->name, node->height);
 
         tree_print_structure(node->left_node, level + 1);
     }

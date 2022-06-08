@@ -1,7 +1,5 @@
 #include <stdbool.h>
 
-#define KEY_SIZE 12
-
 #ifndef tree_definition
 #define tree_definition
 
@@ -38,7 +36,5 @@ tree *tree_remove(tree *root, int key); // ok
 int tree_node_count(tree *root, int level); // ok
 
 int node_height(tree *root); // ok
-
-void tree_clear(tree *root);
 
 #endif
