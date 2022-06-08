@@ -27,9 +27,7 @@ bool node_is_empty(tree *node); // ok
 
 tree *tree_insert(tree *node, tree new_node); // ok
 
-void tree_search(tree *node, int key);
-
-void tree_print(tree *node);
+void tree_search(tree *node, int key); // ok
 
 void tree_print_inc_order(tree *node); // ok
 
@@ -37,7 +35,7 @@ void tree_print_structure(tree *root, int level);
 
 tree *tree_remove(tree *root, int key); // ok
 
-int tree_node_amount(tree *root);
+int tree_node_count(tree *root, int level); // ok
 
 int node_height(tree *root); // ok
 

@@ -45,9 +45,10 @@ int main()
             break;
 
         case 2:
-            printf("Imprimindo elementos\n");
+            printf("Insira cpf do elemento que deseja buscar: ");
+            scanf("%d", &key);
 
-            tree_print(root);
+            tree_search(root, key);
 
             break;
 
@@ -66,7 +67,9 @@ int main()
             break;
 
         case 5:
-            /* code */
+            printf("Imprimindo quantidade de elementos:\n");
+
+            printf("%d\n", tree_node_count(root, 0));
             break;
 
         case 6:
@@ -81,13 +84,6 @@ int main()
             break;
 
         case 8:
-            printf("Insira cpf do elemento que deseja buscar: ");
-            scanf("%d", &key);
-
-            tree_search(root, key);
-            break;
-
-        case 9:
             exit(0);
             break;
 

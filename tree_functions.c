@@ -169,18 +169,19 @@ void tree_search(tree *node, int key)
     }
 }
 
-void tree_print(tree *node)
-{
+int tree_node_count(tree *node, int level)
+{ 
+    int i=0;
     if (!node_is_empty(node))
     {
-        printf("[%d] %s (%d) ", node->cpf, node->name, node->height);
+        i=i + tree_node_count(node->left_node, level + 1);
 
-        tree_print(node->left_node);
+        i++;
 
-        tree_print(node->right_node);
+        i=i + tree_node_count(node->right_node, level + 1);
     }
 
-    return;
+    return i;
 }
 
 void tree_print_inc_order(tree *node)
